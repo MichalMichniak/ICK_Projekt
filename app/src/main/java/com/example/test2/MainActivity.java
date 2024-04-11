@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void run() {
                 try {
                     try {
-                        clientSocket = new Socket("192.168.0.66", 5050);
-                    }//
+//                        clientSocket = new Socket("192.168.0.66", 5050);
+                        clientSocket = new Socket("172.20.10.7", 5050);                    }//
                     catch (UnknownHostException e) {
 
                         throw new RuntimeException(e);
