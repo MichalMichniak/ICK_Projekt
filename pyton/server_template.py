@@ -36,23 +36,28 @@ def send(conn,msg):
 def read_right_left(x, last_x, sec_last_x, spikes):
     if max([sec_last_x, last_x, x]) == last_x or min([sec_last_x, last_x, x]) == last_x:
         spikes.append(last_x)
-        print(spikes)
+        # print(spikes)
         if len(spikes) == 3:
-            if abs(spikes[1]) > 4.5:
+            # if abs(spikes[1]) > 3:
                 # print(spikes)
-                if last_x > 0:
+            if last_x > 0:
                     # prawo
-                    return 'right'
-                else:
-                    return 'left'
+                return 'right'
             else:
-                # print(spikes)
-                # if x > 0:
-                #     # prawo
-                #     return 'right', 0, []
-                # else:
-                #     return 'left', 0, []
-                return []
+                return 'left'
+    return spikes
+
+def read_up_down(x, last_x, sec_last_x, spikes):
+    if max([sec_last_x, last_x, x]) == last_x or min([sec_last_x, last_x, x]) == last_x:
+        if abs(last_x) > 0.5:
+            spikes.append(last_x)
+        # print(spikes)
+        if len(spikes) == 3:
+            if last_x > 0:
+                    # prawo
+                return 'up'
+            else:
+                return 'down'
     return spikes
 
 
@@ -62,6 +67,9 @@ def handle_client(conn : socket.socket, addr):
     last_x = 0
     sec_last_x = 0
     spikes = []
+    last_z = 0
+    sec_last_z = 0
+    spikesz = []
     results = []
     with open("data_out.txt", "w") as myfile:
         while connected:
@@ -76,13 +84,26 @@ def handle_client(conn : socket.socket, addr):
             y_values = float(values[1])
             z_values = float(values[2])
             
-            if abs(last_x) > 1.5:
+            if abs(last_x) > 1 or len(spikes) != 0 and len(spikesz) == 0:
                 spikes = read_right_left(x_values, last_x, sec_last_x, spikes)
                 if type(spikes) == str:
                     print(spikes)
                     spikes = []
+                # elif len(spikes) == 3:
+                #     spikes = [spikes[2]]
+            
+            elif abs(last_z) > 1 or len(spikesz) != 0:
+                spikesz = read_up_down(z_values, last_z, sec_last_z, spikesz)
+                if type(spikesz) == str:
+                    print(spikesz)
+                    spikesz = []
+                # elif len(spikes) == 3:
+                #     spikes = [spikes[2]]
+            sec_last_z = last_z
+            last_z = z_values
             sec_last_x = last_x
             last_x = x_values
+            
     
             myfile.write(msg+"\n")
             
