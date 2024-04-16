@@ -1,6 +1,10 @@
 import socket
 import threading
 import time
+import websocket
+
+import websocket
+import threading
 
 import socket
 import dns.resolver
@@ -15,8 +19,7 @@ ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MSG = "DISCOqNECT!"
 
-server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-server.bind(ADDR)
+
 
 def receive(conn):
     msg_len = conn.recv(HEADER).decode(FORMAT)
@@ -42,9 +45,9 @@ def read_right_left(x, last_x, sec_last_x, spikes):
                 # print(spikes)
             if last_x > 0:
                     # prawo
-                return 'right'
+                return "RIGHT"
             else:
-                return 'left'
+                return "LEFT"
     return spikes
 
 def read_up_down(x, last_x, sec_last_x, spikes):
@@ -55,13 +58,13 @@ def read_up_down(x, last_x, sec_last_x, spikes):
         if len(spikes) == 3:
             if last_x > 0:
                     # prawo
-                return 'up'
+                return "UP"
             else:
-                return 'down'
+                return "DOWN"
     return spikes
 
 
-def handle_client(conn : socket.socket, addr):
+def handle_client(conn : socket.socket, addr, ws : websocket.WebSocketApp):
     print(f"[NEW CONNECTION] {addr} connected")
     connected = True
     last_x = 0
@@ -87,7 +90,7 @@ def handle_client(conn : socket.socket, addr):
             if abs(last_x) > 1 or len(spikes) != 0 and len(spikesz) == 0:
                 spikes = read_right_left(x_values, last_x, sec_last_x, spikes)
                 if type(spikes) == str:
-                    print(spikes)
+                    ws.send(spikes)
                     spikes = []
                 # elif len(spikes) == 3:
                 #     spikes = [spikes[2]]
@@ -95,7 +98,7 @@ def handle_client(conn : socket.socket, addr):
             elif abs(last_z) > 1 or len(spikesz) != 0:
                 spikesz = read_up_down(z_values, last_z, sec_last_z, spikesz)
                 if type(spikesz) == str:
-                    print(spikesz)
+                    ws.send(spikesz)
                     spikesz = []
                 # elif len(spikes) == 3:
                 #     spikes = [spikes[2]]
@@ -104,21 +107,50 @@ def handle_client(conn : socket.socket, addr):
             sec_last_x = last_x
             last_x = x_values
             
-    
-            myfile.write(msg+"\n")
+            
+            # myfile.write(msg+"\n")
             
     conn.close()
     pass
 
-def start():
+def start(ws : websocket.WebSocketApp):
+    server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    server.bind(ADDR)
+
     server.listen()
     print(f"[LISTENING] on addres {SERVER} at port {PORT}")
     while True:
         conn, addr = server.accept()
-        thr = threading.Thread(target = handle_client, args = (conn, addr))
+        thr = threading.Thread(target = handle_client, args = (conn, addr, ws))
         thr.start()
         print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
     pass
 
-print("[STARTING] ...")
-start()
+
+
+def on_message(ws, message):
+    print(message)
+
+def on_error(ws, error):
+    print(error)
+
+def on_close(ws):
+    print("Closing")
+
+def on_open(ws):
+    # Start a separate thread for user input
+    threading.Thread(target=get_user_input, args=(ws,)).start()
+
+def get_user_input(ws):
+    print("[STARTING] ...")
+    start(ws)
+
+websocket.enableTrace(True)
+ws = websocket.WebSocketApp("ws://localhost:6969/Auth",
+                            on_message=on_message,
+                            on_error=on_error,
+                            on_close=on_close)
+ws.on_open = on_open
+    
+ws.run_forever()
+
