@@ -39,10 +39,7 @@ def send(conn,msg):
 def read_right_left(x, last_x, sec_last_x, spikes):
     if max([sec_last_x, last_x, x]) == last_x or min([sec_last_x, last_x, x]) == last_x:
         spikes.append(last_x)
-        # print(spikes)
         if len(spikes) == 3:
-            # if abs(spikes[1]) > 3:
-                # print(spikes)
             if last_x > 0:
                     # prawo
                 return "RIGHT"
@@ -54,10 +51,8 @@ def read_up_down(x, last_x, sec_last_x, spikes):
     if max([sec_last_x, last_x, x]) == last_x or min([sec_last_x, last_x, x]) == last_x:
         if abs(last_x) > 0.5:
             spikes.append(last_x)
-        # print(spikes)
         if len(spikes) == 3:
             if last_x > 0:
-                    # prawo
                 return "UP"
             else:
                 return "DOWN"
@@ -129,7 +124,8 @@ def start(ws : websocket.WebSocketApp):
 
 
 def on_message(ws, message):
-    print(message)
+    # print(message)
+    pass
 
 def on_error(ws, error):
     print(error)
@@ -146,7 +142,7 @@ def get_user_input(ws):
     start(ws)
 
 websocket.enableTrace(True)
-ws = websocket.WebSocketApp("ws://localhost:6969/Auth",
+ws = websocket.WebSocketApp("ws://192.168.0.106:2137/Auth",
                             on_message=on_message,
                             on_error=on_error,
                             on_close=on_close)
@@ -154,3 +150,4 @@ ws.on_open = on_open
     
 ws.run_forever()
 
+ 
