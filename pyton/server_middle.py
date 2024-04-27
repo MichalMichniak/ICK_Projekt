@@ -1,13 +1,8 @@
 import socket
 import threading
-import time
 import websocket
 
-import websocket
-import threading
 
-import socket
-import dns.resolver
 
 PORT = 5050
 HEADER = 64
@@ -142,7 +137,7 @@ def get_user_input(ws):
 
 
 websocket.enableTrace(True)
-ws = websocket.WebSocketApp("ws://192.168.0.106:2137/Auth",
+ws = websocket.WebSocketApp("ws://192.168.1.102:2137/Auth",
                             on_message=on_message,
                             on_error=on_error,
                             on_close=on_close)

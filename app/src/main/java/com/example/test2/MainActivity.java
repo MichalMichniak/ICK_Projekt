@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // inicjalizacja socket-a
                     try {
 //                        clientSocket = new Socket("192.168.0.66", 5050);
-                        clientSocket = new Socket("192.168.0.66", 5050);                    }//
+                        clientSocket = new Socket("192.168.1.102", 5050);                    }//
                     catch (UnknownHostException e) {
                         throw new RuntimeException(e);
                     } catch (IOException e) {

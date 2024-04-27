@@ -10,8 +10,8 @@ def on_new_client(client, server):
     print("New client connected")
 
 if __name__ == "__main__":
-    host = "localhost"  # specify the host
-    port = 6969  # specify the port
+    host = "192.168.1.102"  # specify the host
+    port = 2137  # specify the port
     server = websocket_server.WebsocketServer(host=host,port=port)
     server.set_fn_message_received(on_message)
     server.set_fn_new_client(on_new_client)
