@@ -8,40 +8,11 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.714" />
-
-    <TextView
         android:id="@+id/textid1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        tools:layout_editor_absoluteX="110dp"
-        tools:layout_editor_absoluteY="162dp" />
-
-    <Button
-        android:id="@+id/button_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textid1"
-        tools:layout_editor_absoluteX="70dp" />
-
-    <TextView
-        android:id="@+id/lr_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/button_test"
-        app:layout_constraintTop_toBottomOf="@+id/textid1"
-        tools:layout_editor_absoluteX="99dp" />
+        tools:layout_editor_absoluteX="156dp"
+        tools:layout_editor_absoluteY="160dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
